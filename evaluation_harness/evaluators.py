@@ -39,7 +39,6 @@ class Evaluator(object):
         trajectory: Trajectory,
         config_file: Path | str,
         page: Page | PseudoPage,
-        client: CDPSession,
     ) -> float:
         raise NotImplementedError
 
@@ -125,7 +124,6 @@ class StringEvaluator(Evaluator):
         trajectory: Trajectory,
         config_file: Path | str,
         page: Page | PseudoPage | None = None,
-        client: CDPSession | None = None,
     ) -> float:
         with open(config_file, "r") as f:
             configs = json.load(f)
@@ -179,7 +177,6 @@ class URLEvaluator(Evaluator):
         trajectory: Trajectory,
         config_file: Path | str,
         page: Page | PseudoPage,
-        client: CDPSession | None = None,
     ) -> float:
         with open(config_file, "r") as f:
             configs = json.load(f)
@@ -250,7 +247,6 @@ class HTMLContentEvaluator(Evaluator):
         trajectory: Trajectory,
         config_file: Path | str,
         page: Page | PseudoPage,
-        client: CDPSession | None = None,
     ) -> float:
         with open(config_file, "r") as f:
             configs = json.load(f)
@@ -343,11 +339,10 @@ class EvaluatorComb:
         trajectory: Trajectory,
         config_file: Path | str,
         page: Page | PseudoPage,
-        client: CDPSession,
     ) -> float:
         score = 1.0
         for evaluator in self.evaluators:
-            cur_score = evaluator(trajectory, config_file, page, client)
+            cur_score = evaluator(trajectory, config_file, page)
             score *= cur_score
         return score
 
