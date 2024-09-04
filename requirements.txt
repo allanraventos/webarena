@@ -1,5 +1,5 @@
 gymnasium
-playwright==1.32.1
+# playwright==1.32.1 # brings in greenlet, which breaks in apple silicon. no need to re-install playwright
 Pillow
 evaluate
 # Trying to comment out because this leads to problems with instructor_task
