@@ -172,7 +172,7 @@ async def _throttled_openai_chat_completion_acreate(
     async with limiter:
         for _ in range(3):
             try:
-                return await openai.ChatCompletion.acreate(  # type: ignore
+                return await openai.chat.completions.acreate(  # type: ignore
                     model=model,
                     messages=messages,
                     temperature=temperature,
@@ -235,7 +235,7 @@ async def agenerate_from_openai_chat_completion(
         for message in messages_list
     ]
     responses = await tqdm_asyncio.gather(*async_responses)
-    return [x["choices"][0]["message"]["content"] for x in responses]
+    return [x.choices[0].message.content for x in responses]
 
 
 @retry_with_exponential_backoff
@@ -255,7 +255,7 @@ def generate_from_openai_chat_completion(
     openai.api_key = os.environ["OPENAI_API_KEY"]
     openai.organization = os.environ.get("OPENAI_ORGANIZATION", "")
 
-    response = openai.ChatCompletion.create(  # type: ignore
+    response = openai.chat.completions.create(  # type: ignore
         model=model,
         messages=messages,
         temperature=temperature,
@@ -263,7 +263,7 @@ def generate_from_openai_chat_completion(
         top_p=top_p,
         stop=[stop_token] if stop_token else None,
     )
-    answer: str = response["choices"][0]["message"]["content"]
+    answer: str = response.choices[0].message.content
     return answer
 
 
